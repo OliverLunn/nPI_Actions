@@ -12,7 +12,7 @@ We work in terms of rescaled coordinates:
 
 '''
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/3) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi) + (1/2 * k * phi**2))
+    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/3) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi) +  (k * phi**2))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -28,7 +28,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (phi**2 + delta)
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * delta
     return array
 
 
@@ -49,8 +49,8 @@ if __name__ == '__main__':
     step, min_val, max_val = 0.1, -10, 10
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-4,4+step,step)
-    delta_values = np.arange(-4,4+step,step)
+    phi_values = np.arange(-2,2+step,step)
+    delta_values = np.arange(-2,2+step,step)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
@@ -60,23 +60,17 @@ if __name__ == '__main__':
     z = integration(j_values, k_values, msq, xhi, lamb, z)
     w = -np.log(z)
     gamma = max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma)
-    ext_coord = np.unravel_index(gamma.argmin(), gamma.shape)
-    print("2PI CALCULATED")
 
+    ext_coord = np.unravel_index(gamma.argmin(), gamma.shape)
     X, Y = np.meshgrid(phi_values,delta_values)
 
-
-    fig, (ax1) = plt.subplots(1,1)     #figures for plots
-    fig, (ax2) = plt.subplots(1,1)
-    im1 = ax1.imshow(gamma, cmap='viridis')
-    ax2.contour(X,Y,gamma)
-    #ax1.set_xticks(np.arange(0, len(gamma), step*16), phi_values[::4])
-    #ax1.set_yticks(np.arange(0, len(gamma), step*16), delta_values[::4])
+    fig, (ax1) = plt.subplots(1,1)     #figure for plots
+    im1 = ax1.pcolormesh(phi_values, delta_values, gamma)
+    ax1.contour(X,Y,gamma, colors=['black'])
     ax1.set_xlabel("$\phi$")
     ax1.set_ylabel("$\Delta$")
     ax1.set_title("$\Gamma[\phi,\Delta]$")
-    ax1.plot(ext_coord[1],ext_coord[0], ".w")
-    ax1.invert_yaxis()
+    ax1.plot(phi_values[ext_coord[1]], delta_values[ext_coord[0]], ".w")
     plt.colorbar(im1)
     plt.tight_layout
     plt.show()
