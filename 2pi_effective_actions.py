@@ -26,7 +26,7 @@ def gamma_j(phi, j_values, k_values, w, delta, array):
 if __name__ == '__main__':
    
     m, xhi, lamb = -1, 0, 6
-    phi, delta = 2,2
+    phi, delta = 2, 2
     step, min_val, max_val = 0.5, -6, 6
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)

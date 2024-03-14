@@ -3,10 +3,18 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 from matplotlib import colormaps
+'''
+We work in terms of rescaled coordinates:
 
+ phi_prime = phi
+ delta_prime = phi^2 + delta
+ J_prime = J
+ K_prime = K / 2
+
+'''
 
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/6) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi) + (1/2 * k * phi**2))
+    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/6) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi) + (k * phi**2))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -22,7 +30,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (phi**2 + delta)
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta)
     return array
 
 def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
