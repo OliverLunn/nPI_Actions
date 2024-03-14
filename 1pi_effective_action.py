@@ -21,28 +21,9 @@ def classical_action(phi_values, m, xhi, lamb, array):
         array.append(s)
     return array
 
-'''
-def z_j_fnc(j_values, m, xhi, lamb, array):
-    """
-    Calculates the correlation functional for the 0 dimensional system.
-    Inputs:
-        j_values [numpy.array] : range of j values
-        m [float] : mass term
-        xhi [float] : cubic term
-        lamb [float] : quartic term
-        array [numpy.array] : array to store values
-    Outputs:
-        array [numpy.array] : array of values for Z[J]
-    """
-    for j in range(len(j_values)):
-        integrand = lambda phi: np.exp(-(m/2) * (phi ** 2) - (xhi/3) * (phi**3) - (lamb/24) * (phi ** 4) - (j_values[j]) * phi)
-        z = integrate.quad(integrand, -np.inf, np.inf)
-        array.append(z[0])
-    return array
-'''
 
 def integrand(phi, m, xhi, j):
-    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/3) * xhi * (phi**3)- (lamb/24) * (phi ** 4) - (j * phi))
+    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/3) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi))
     return integrand
 
 def gamma_j(phi_values, j_values, w, array):
@@ -51,7 +32,7 @@ def gamma_j(phi_values, j_values, w, array):
     """
     for i in range(len(phi_values)):
         for j in range(len(j_values)):
-            array[j,i] = w[j] - j_values[j] * phi_values[i]
+            array[j,i] = w[j] + j_values[j] * phi_values[i]
     return array
 
 if __name__ == '__main__':
