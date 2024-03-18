@@ -12,7 +12,7 @@ We work in terms of rescaled coordinates:
 
 '''
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-(m / 2) * (phi ** 2) - (1/3) * xhi * (phi**3)- (lamb/24) * (phi ** 4) + (j * phi) +  (k * phi**2))
+    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (k * phi**2))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -46,11 +46,11 @@ if __name__ == '__main__':
    
     msq, xhi, lamb = -2, 0, 6
     
-    step, min_val, max_val = 0.1, -10, 10
+    step, min_val, max_val = 0.5, -20, 20
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-2,2+step,step)
-    delta_values = np.arange(0,4+step,step)
+    phi_values = np.arange(-12,12+step,step)
+    delta_values = np.arange(-12,12+step,step)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     im1 = ax1.pcolormesh(phi_values, delta_values, gamma)
     ax1.contour(X,Y,gamma, colors=['black'])
     ax1.set_xlabel("$\phi$")
-    ax1.set_ylabel("$\Delta$")
+    ax1.set_ylabel("$\Delta'$")
     ax1.set_title("$\Gamma[\phi,\Delta]$")
     ax1.plot(phi_values[ext_coord[1]], delta_values[ext_coord[0]], ".w")
     plt.colorbar(im1)

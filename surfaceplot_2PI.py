@@ -51,7 +51,7 @@ if __name__ == '__main__':
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     phi_values = np.arange(-2,2+step,step)
-    delta_values = np.arange(0,4+step,step)
+    delta_values = np.arange(-2,2+step,step)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
