@@ -27,7 +27,7 @@ if __name__ == '__main__':
    
     m, xhi, lamb = -1, 0, 6
     phi, delta = 2, 2
-    step, min_val, max_val = 0.5, -6, 6
+    step, min_val, max_val = 0.1, -6, 6
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     fig, (ax3) = plt.subplots(1,1)             #figures for plots
     fig1, (ax1) = plt.subplots(1,1)
-    '''
+
     im = ax3.imshow(w, cmap='viridis')
     ax3.set_xticks([0, len(j_values)/2, len(j_values)], [-5,0,5])
     ax3.set_yticks([0, len(j_values)/2, len(j_values)], [-5,0,5])
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     ax3.set_xlabel("J")
     ax3.set_ylabel("K")
     ax3.set_title("$W[J,K]$")
-    '''
+
     im1 = ax1.imshow(g, cmap='viridis')
     ax1.set_xticks(np.arange(0, len(g), step*8), j_values[::4])
     ax1.set_yticks(np.arange(0, len(g), step*8), k_values[::4])
@@ -60,6 +60,5 @@ if __name__ == '__main__':
     ax1.invert_yaxis()
 
     plt.colorbar(im1)
-    #plt.colorbar(im1)
     plt.tight_layout
     plt.show()

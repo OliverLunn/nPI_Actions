@@ -45,7 +45,7 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
 
 if __name__ == '__main__':
    
-    m, xhi, lamb = -1, 0, 6
+    m, xhi, lamb = -2, 0, 6
     
     step, min_val, max_val = 0.1, -10, 10
     j_values = np.arange(min_val, max_val+step, step)                  
@@ -69,7 +69,8 @@ if __name__ == '__main__':
     im1=ax1.plot_surface(X, Y, gamma, cmap="viridis")
     ax1.set_xlabel("$\phi$")
     ax1.set_ylabel("$\Delta$")
-    ax1.set_title("$\Gamma[\phi,\Delta]$    (m=-1, $\lambda=6$)")
+    ax1.set_title("$\Gamma[\phi,\Delta]$    (m=-2, $\lambda=6$)")
+
     plt.tight_layout
     plt.show()
 
