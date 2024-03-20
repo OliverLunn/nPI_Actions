@@ -26,8 +26,8 @@ def gamma_j(phi, j_values, k_values, w, delta, array):
 if __name__ == '__main__':
    
     m, xhi, lamb = -1, 0, 6
-    phi, delta = 2, 2
-    step, min_val, max_val = 0.1, -6, 6
+    phi, delta = 2, 4
+    step, min_val, max_val = 0.5, -20, 20
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     
@@ -42,23 +42,16 @@ if __name__ == '__main__':
     fig, (ax3) = plt.subplots(1,1)             #figures for plots
     fig1, (ax1) = plt.subplots(1,1)
 
-    im = ax3.imshow(w, cmap='viridis')
-    ax3.set_xticks([0, len(j_values)/2, len(j_values)], [-5,0,5])
-    ax3.set_yticks([0, len(j_values)/2, len(j_values)], [-5,0,5])
-    ax3.invert_yaxis()
+    im = ax3.pcolormesh(j_values, k_values, w, cmap='viridis')
     ax3.set_xlabel("J")
     ax3.set_ylabel("K")
     ax3.set_title("$W[J,K]$")
 
-    im1 = ax1.imshow(g, cmap='viridis')
-    ax1.set_xticks(np.arange(0, len(g), step*8), j_values[::4])
-    ax1.set_yticks(np.arange(0, len(g), step*8), k_values[::4])
+    im1 = ax1.pcolormesh(j_values, k_values, g, cmap='viridis')
     ax1.set_xlabel("J")
     ax1.set_ylabel("K")
     ax1.set_title("$\Gamma_{J,K}[$"+str(phi)+","+str(delta)+"$]$")
-    ax1.plot(max_coord[1],max_coord[0], ".k")
-    ax1.invert_yaxis()
-
+    ax1.plot(j_values[max_coord[1]],k_values[max_coord[0]], ".k")
     plt.colorbar(im1)
     plt.tight_layout
     plt.show()
