@@ -38,19 +38,19 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
     """
     for p in range(len(phi_values)):
          for d in range(len(delta_values)):
-            g = gamma_jk(phi_values[p], j_values, k_values, w, delta_values[d], g_jk)       
-            gamma[d,p] = np.max(g)
+            g = gamma_jk(phi_values[p], j_values, k_values, w, delta_values[d], g_jk)
+            gamma[d,p] = np.nanmax(g)
     return gamma
 
 if __name__ == '__main__':
    
-    msq, xhi, lamb = -1, 0, 2
+    msq, xhi, lamb = -2, 0, 6
     
-    step, min_val, max_val = 0.15, -20, 20
+    step, min_val, max_val = 5, -50, 50
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-1.5,1.5+step,step)
-    delta_values = np.arange(0,3+step,step)
+    phi_values = np.arange(-1.5,1.5,0.05)
+    delta_values = np.arange(0,3,0.05)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
@@ -60,17 +60,18 @@ if __name__ == '__main__':
     z = integration(j_values, k_values, msq, xhi, lamb, z)
     w = -np.log(z)
     gamma = max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma)
+    #ext_coord = np.unravel_index(gamma.argmin(), gamma.shape)
 
-    ext_coord = np.unravel_index(gamma.argmin(), gamma.shape)
     X, Y = np.meshgrid(phi_values,delta_values)
-
+    
     fig, (ax1) = plt.subplots(1,1)     #figure for plots
     im1 = ax1.pcolormesh(phi_values, delta_values, gamma)
+    
     ax1.contour(X,Y,gamma, colors=['black'])
     ax1.set_xlabel("$\phi$")
     ax1.set_ylabel("$\Delta'$")
     ax1.set_title("$\Gamma[\phi,\Delta]$")
-    ax1.plot(phi_values[ext_coord[1]], delta_values[ext_coord[0]], ".w")
+    #ax1.plot(phi_values[ext_coord[1]], delta_values[ext_coord[0]], ".w")
     plt.colorbar(im1)
     plt.tight_layout
     plt.show()

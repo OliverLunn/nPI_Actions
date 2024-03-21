@@ -30,7 +30,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta + phi**2)
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta)
     return array
 
 def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
@@ -47,11 +47,11 @@ if __name__ == '__main__':
    
     m, xhi, lamb = -2, 0, 6
     
-    step, min_val, max_val = 0.1, -10, 10
+    step, min_val, max_val = 5, -20, 20
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-2,2+step,step)
-    delta_values = np.arange(0,2+step,step)
+    phi_values = np.arange(-2,2,0.05)
+    delta_values = np.arange(0,4,0.05)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
