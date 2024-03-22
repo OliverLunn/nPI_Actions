@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
 from matplotlib import colormaps
+from tqdm import tqdm
 '''
 We work in terms of rescaled coordinates:
 
@@ -16,7 +17,7 @@ def integrand(phi, m, xhi, lamb, j, k):
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
-    for j in range(len(j_values)):
+    for j in tqdm(range(len(j_values))):
         for k in range(len(k_values)):
             z_intermediate = integrate.quad(integrand, -np.inf, np.inf, args=(m, xhi, lamb, j_values[j], k_values[k]))
             z[k,j] = z_intermediate[0]
@@ -32,25 +33,42 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     return array
 
 
+def maximise(g):
+    '''
+    Finds and maximises G_{JK} (if max is at boundary returns NaN)
+    '''
+    max_coord = np.unravel_index(np.nanargmax(g), g.shape)
+    g_padded = np.pad(g, 1, mode='constant')
+
+    if np.any(g_padded[:,max_coord[1]+2]) == False or np.any(g_padded[:,max_coord[1]-1]) == False:
+        max_gamma = np.nan
+    elif np.any(g_padded[max_coord[0]+1,:]) == False or np.any(g_padded[max_coord[0]-2,:]) == False:
+        max_gamma = np.nan
+    else:
+        max_gamma = np.nanmax(g)
+    return max_gamma
+
 def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
     """
     Extremises \Gamma_{JK} to find \Gamma{\phi,\Delta}
     """
-    for p in range(len(phi_values)):
+    for p in tqdm(range(len(phi_values))):
          for d in range(len(delta_values)):
             g = gamma_jk(phi_values[p], j_values, k_values, w, delta_values[d], g_jk)
-            gamma[d,p] = np.nanmax(g)
+            gamma[d,p] = maximise(g)
     return gamma
+
 
 if __name__ == '__main__':
    
     msq, xhi, lamb = -2, 0, 6
     
-    step, min_val, max_val = 5, -50, 50
+    step, min_val, max_val = 0.5, -100, 100
+    step_pd = 0.1
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-1.5,1.5,0.05)
-    delta_values = np.arange(0,3,0.05)
+    phi_values = np.arange(-2,2+step_pd, step_pd)
+    delta_values = np.arange(0.2,4.2+step_pd, step_pd)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
@@ -58,9 +76,9 @@ if __name__ == '__main__':
 
     #2PI Calculation
     z = integration(j_values, k_values, msq, xhi, lamb, z)
+    print("Z calculated")
     w = -np.log(z)
     gamma = max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma)
-    #ext_coord = np.unravel_index(gamma.argmin(), gamma.shape)
 
     X, Y = np.meshgrid(phi_values,delta_values)
     
@@ -71,7 +89,6 @@ if __name__ == '__main__':
     ax1.set_xlabel("$\phi$")
     ax1.set_ylabel("$\Delta'$")
     ax1.set_title("$\Gamma[\phi,\Delta]$")
-    #ax1.plot(phi_values[ext_coord[1]], delta_values[ext_coord[0]], ".w")
     plt.colorbar(im1)
     plt.tight_layout
     plt.show()
