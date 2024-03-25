@@ -61,14 +61,14 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
 
 if __name__ == '__main__':
    
-    msq, xhi, lamb = -2, 0, 6
+    msq, xhi, lamb = -1, 0, 6
     
-    step, min_val, max_val = 0.5, -100, 100
-    step_pd = 0.1
+    step, min_val, max_val = 2, -50, 50
+    step_pd = 0.005
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
-    phi_values = np.arange(-2,2+step_pd, step_pd)
-    delta_values = np.arange(0.2,4.2+step_pd, step_pd)
+    phi_values = np.arange(-1.5,1.5+step_pd, step_pd)
+    delta_values = np.arange(0.25,3.25+step_pd, step_pd)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
