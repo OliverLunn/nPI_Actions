@@ -37,9 +37,9 @@ def gamma_j(phi_values, j_values, w, array):
 
 if __name__ == '__main__':
    
-    m, xhi, lamb = -2, 0, 6
-    j_values = np.arange(-100, 20, 0.1)                  #values for j
-    phi_values = np.arange(-9, 5, 0.1)                  #values for mean-field phi
+    m, xhi, lamb = -1, 1, 6
+    j_values = np.arange(-100, 100, 0.1)                  #values for j
+    phi_values = np.arange(-2, 2, 0.01)                  #values for mean-field phi
 
     z_j = []                                            #empty z values
     max_gamma = []                                      #empty 1pi action values
