@@ -1,5 +1,5 @@
-Quantum nPI actions in 0-dimensions:
+A 4th year MSci Project at the University of Nottingham: Quantum nPI actions in 0-dimensions
 
-1PI Partition functional: $Z(J)=\int d \Phi exp[S(\Phi)-J\Phi]$
+We model and investigate the behaviour of the 1PI and 2PI effective actions as functions of the one- and two- point variables.
 
-2PI Partition functional : $Z(J)=\int d \Phi exp[S(\Phi)-J\Phi-\frac{1}{2}K\Phi^2]$
+
