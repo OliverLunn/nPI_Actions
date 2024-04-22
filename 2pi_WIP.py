@@ -13,7 +13,7 @@ We work in terms of rescaled coordinates:
 
 '''
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  ((1/2) * k * (phi**2)))
+    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (k * (phi**2)))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -29,7 +29,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + (1/2) * k_values[k] * ((phi**2) + delta)
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * ((delta))
     return array
 
 
@@ -63,18 +63,16 @@ if __name__ == '__main__':
    
     msq, xhi, lamb = -2, 0, 4
     
-    step, min_val, max_val = 0.5, -70, 70
-    step_pd = 0.05
+    step, min_val, max_val = 0.5, -120, 120
+    step_pd = 0.02
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     phi_values = np.arange(-2,2+step_pd, step_pd)
-    delta_values = np.arange(0.2,4.2+step_pd, step_pd)
+    delta_values = np.arange(0.25,4.25+step_pd, step_pd)
 
     z = np.zeros((len(j_values), len(k_values)))                                           
     g_jk = np.zeros((len(j_values), len(k_values)))     #array for \Gamma_{JK}
     gamma = np.zeros((len(phi_values), len(delta_values)))  #array for \Gamma[\phi, \Delta]
-    g_1pi = np.zeros((len(j_values), len(k_values)))
-    gamma_1pi = np.zeros((len(phi_values), len(delta_values)))
 
     #2PI Calculation
     z = integration(j_values, k_values, msq, xhi, lamb, z)
@@ -93,3 +91,6 @@ if __name__ == '__main__':
     ax1.set_aspect('equal')
     plt.tight_layout
     plt.show()
+    pd_txt = np.vstack((phi_values, delta_values))
+    np.savetxt("data2.txt", gamma)
+    np.savetxt("pd_values2.txt", pd_txt)
