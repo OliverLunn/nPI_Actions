@@ -42,8 +42,8 @@ def maximise(g):
 if __name__ == '__main__':
    
     m, xhi, lamb = -2, 0, 4
-    phi, delta = 1,2
-    step, min_val, max_val = 0.1, -10, 10
+    phi, delta = 0,0
+    step, min_val, max_val = 1, -10, 10
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     

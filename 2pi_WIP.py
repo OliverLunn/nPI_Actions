@@ -29,7 +29,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * ((delta))
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta)
     return array
 
 
@@ -63,8 +63,8 @@ if __name__ == '__main__':
    
     msq, xhi, lamb = -2, 0, 4
     
-    step, min_val, max_val = 0.5, -120, 120
-    step_pd = 0.02
+    step, min_val, max_val = 0.2, -110, 110
+    step_pd = 0.05
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     phi_values = np.arange(-2,2+step_pd, step_pd)
@@ -92,5 +92,5 @@ if __name__ == '__main__':
     plt.tight_layout
     plt.show()
     pd_txt = np.vstack((phi_values, delta_values))
-    np.savetxt("data2.txt", gamma)
-    np.savetxt("pd_values2.txt", pd_txt)
+    np.savetxt("data12.txt", gamma)
+    np.savetxt("pd_values12.txt", pd_txt)
