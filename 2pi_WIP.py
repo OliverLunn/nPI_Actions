@@ -13,7 +13,7 @@ We work in terms of rescaled coordinates:
 
 '''
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (k * (phi**2)))
+    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (1/2 * k * (phi**2)))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -29,7 +29,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta)
+                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (phi**2 + delta)
     return array
 
 
@@ -61,9 +61,9 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
 
 if __name__ == '__main__':
    
-    msq, xhi, lamb = -2, 0, 4
+    msq, xhi, lamb = 2, 0, 0.1
     
-    step, min_val, max_val = 0.2, -110, 110
+    step, min_val, max_val = 0.5, -30, 30
     step_pd = 0.05
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
@@ -92,5 +92,5 @@ if __name__ == '__main__':
     plt.tight_layout
     plt.show()
     pd_txt = np.vstack((phi_values, delta_values))
-    np.savetxt("data12.txt", gamma)
-    np.savetxt("pd_values12.txt", pd_txt)
+    np.savetxt("data15.txt", gamma)
+    np.savetxt("pd_values15.txt", pd_txt)
