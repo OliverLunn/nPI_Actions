@@ -35,7 +35,9 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
 
 def maximise(g):
     '''
-    Finds and maximises G_{JK} (if max is at boundary returns NaN)
+    Finds maximum of G_{JK}
+    We want to know if maximum is at boundary of array or not.
+    If maximum is at edge of array returns NaN value else returns maximum.
     '''
     max_coord = np.unravel_index(np.nanargmax(g), g.shape)
     g_padded = np.pad(g, 1, mode='constant')
@@ -61,11 +63,11 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
 
 if __name__ == '__main__':
    
-    msq, xhi, lamb = 2, 0, 0.1
-    
+    msq, xhi, lamb = -2, 0, 0.1 #constants
+
     step, min_val, max_val = 0.5, -30, 30
     step_pd = 0.05
-    j_values = np.arange(min_val, max_val+step, step)                  
+    j_values = np.arange(min_val, max_val+step, step)     #arrays for source terms and one- and two- point functs             
     k_values = np.arange(min_val, max_val+step, step)
     phi_values = np.arange(-2,2+step_pd, step_pd)
     delta_values = np.arange(0.25,4.25+step_pd, step_pd)
@@ -81,7 +83,7 @@ if __name__ == '__main__':
     gamma = max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma)
     X, Y = np.meshgrid(phi_values,delta_values)
     
-    fig, (ax1) = plt.subplots(1,1)     #figure for plots
+    fig, (ax1) = plt.subplots(1,1)     #plots
     im1 = ax1.pcolormesh(phi_values, delta_values, gamma)
     ax1.contour(X,Y,gamma, colors=['black'])
     ax1.set_xlabel("$\phi$", fontsize="28")

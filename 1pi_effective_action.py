@@ -17,7 +17,7 @@ def classical_action(phi_values, m, xhi, lamb, array):
     
     """
     for phi in phi_values:
-        s = 0.5 * ((m) ** 2) * (phi ** 2) + (xhi / (3)) * (phi**3) + (lamb / 24) * (phi ** 4)
+        s = 0.5 * (m) * (phi ** 2) + (xhi / (3)) * (phi**3) + (lamb / 24) * (phi ** 4)
         array.append(s)
     return array
 
@@ -37,9 +37,9 @@ def gamma_j(phi_values, j_values, w, array):
 
 if __name__ == '__main__':
    
-    m, xhi, lamb = -1, 1, 6
-    j_values = np.arange(-100, 100, 0.1)                  #values for j
-    phi_values = np.arange(-2, 2, 0.01)                  #values for mean-field phi
+    m, xhi, lamb = -2, 0, 6
+    j_values = np.arange(-50, 50, 0.01)                  #values for j
+    phi_values = np.arange(-3, 3, 0.01)                  #values for mean-field phi
 
     z_j = []                                            #empty z values
     max_gamma = []                                      #empty 1pi action values
@@ -54,29 +54,29 @@ if __name__ == '__main__':
     max = np.max(g, axis=0)                           #find max of g_j
     max_gamma = np.append(max_gamma, max, axis=0)       #store
     
-    fig, (ax1,ax2,ax3) = plt.subplots(1,3)             #figures for plots
+    fig, (ax2) = plt.subplots(1,1)             #figures for plots
     fig1, (ax4) = plt.subplots(1,1)
-
-    ax1.plot(j_values, z_j, '.')
-    ax1.set_xlabel("J")
-    ax1.set_ylabel("$Z[J]$")
+    fig2, (ax3) = plt.subplots(1,1)
 
     ax2.plot(j_values, w, ".")
-    ax2.set_xlabel("J")
-    ax2.set_ylabel("W[J]")
+    ax2.set_xlabel("J", fontsize="30")
+    ax2.set_ylabel("W(J)", fontsize="30")
+    ax2.tick_params(labelsize=26)
     
     for i in range(len(phi_values)):
-        ax3.plot(j_values, g_j[:,i])
-        ax3.set_xlabel("J")
-        ax3.set_ylabel("$\Gamma_J  [\phi]$")
+        ax3.plot(j_values, g_j[:,i], linewidth=2.5)
+        ax3.set_xlabel("J", fontsize="30")
+        ax3.set_ylabel("$\Gamma_J  (\phi)$", fontsize="30")
+        ax3.tick_params(labelsize=26)
 
     s_class = []
     s_classical = classical_action(phi_values, m, xhi, lamb, s_class)
 
-    ax4.plot(phi_values, s_classical, "k", label="$S[\phi]$")
-    ax4.plot(phi_values, max_gamma, ".", label="$\Gamma[\phi]$")
-    ax4.set_xlabel("$\phi$")
-    ax4.set_ylabel("$\Gamma[\phi]$")
-    ax4.legend()
-    plt.tight_layout
+    ax4.plot(phi_values, s_classical, "k", label="$S(\phi)$")
+    ax4.plot(phi_values, max_gamma, ".", label="$\Gamma(\phi)$")
+    ax4.set_xlabel("$\phi$", fontsize="30")
+    ax4.set_ylabel("$\Gamma(\phi)$", fontsize="30")
+    ax4.tick_params(labelsize=26)
+    ax4.legend(loc="upper right", fontsize=28)
+
     plt.show()
