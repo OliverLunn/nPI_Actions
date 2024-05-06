@@ -42,30 +42,34 @@ def maximise(g):
 if __name__ == '__main__':
    
     m, xhi, lamb = -2, 0, 4
-    phi, delta = 0,0
-    step, min_val, max_val = 1, -10, 10
+    phi, delta = -2, 1
+    step, min_val, max_val = 0.05, -5, 5
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     
-    z = np.zeros((len(j_values), len(k_values)))                                           
+    z = np.zeros((len(j_values), len(k_values)))         
     g_j = np.zeros((len(j_values), len(k_values)))
     
     z = integration(j_values, k_values, m, xhi, lamb, z)
     w = -np.log(z)
-    g = gamma_j(phi, j_values, k_values, w, delta, g_j)       #calling g_j  funct to generate g_j data
-    max_gamma, max_coord = maximise(g)
-    print(max_gamma)
-
+    #g = gamma_j(phi, j_values, k_values, w, delta, g_j)       #calling g_j  funct to generate g_j data
+    #g = g-np.nanmin(g)
+    #max_gamma, max_coord = maximise(g)
+    #print(max_gamma)
     fig1, (ax1) = plt.subplots(1,1)
+    fig = plt.figure()
+    ax2 = fig.add_subplot(111, projection='3d')
     
-    im1 = ax1.pcolormesh(j_values, k_values, g, cmap='viridis')
+    im1 = ax1.pcolormesh(j_values, k_values, w, cmap='viridis', vmin=-35, vmax=5)
     ax1.set_xlabel("J", fontsize="30")
     ax1.set_ylabel("K", fontsize="30")
-    ax1.set_title("$\Gamma_{J,K}[$"+str(phi)+","+str(delta)+"$]$", fontsize="30")
-    ax1.plot(j_values[max_coord[1]], k_values[max_coord[0]], ".k",markersize="12.5")
-    ax1.tick_params(labelsize=26)
+    ax1.set_xticks([-6,-3,0,3,6])
+    ax1.set_yticks([-6,-3,0,3,6])
+    #ax1.plot(j_values[max_coord[1]], k_values[max_coord[0]], ".k",markersize="12.5")
+    ax1.tick_params(labelsize=28)
     cbar = plt.colorbar(im1)
-    cbar.ax.tick_params(labelsize=26)
+    cbar.ax.tick_params(labelsize=28)
     ax1.set_aspect('equal')
+
     plt.tight_layout()
     plt.show()
