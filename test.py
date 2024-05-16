@@ -5,7 +5,7 @@ import numpy as np
 
 if __name__ == '__main__':
    
-    msq, xhi, lamb = 1, 0, 4 #set constants
+    msq, xhi, lamb = 2, 0, 4 #set constants
     step_pd = 0.1
     phi_values = np.arange(-2,2+step_pd, step_pd)   #arrays of one- and two- point functions
     delta_values = np.arange(0,4+step_pd, step_pd)

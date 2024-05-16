@@ -37,8 +37,8 @@ def gamma_j(phi_values, j_values, w, array):
 
 if __name__ == '__main__':
    
-    m, xhi, lamb = -2, 0, 6
-    j_values = np.arange(-50, 50, 0.01)                  #values for j
+    m, xhi, lamb = 2,0,1
+    j_values = np.arange(-50, 50, 0.15)                  #values for j
     phi_values = np.arange(-3, 3, 0.01)                  #values for mean-field phi
 
     z_j = []                                            #empty z values
@@ -49,11 +49,20 @@ if __name__ == '__main__':
         z = integrate.quad(integrand, -np.inf, np.inf, args=(m,xhi,j))
         z_j.append(z[0])
 
+
     w = -np.log(z_j)
     g = gamma_j(phi_values, j_values, w, g_j)       #calling g_j  funct to generate g_j data
     max = np.max(g, axis=0)                           #find max of g_j
     max_gamma = np.append(max_gamma, max, axis=0)       #store
-    
+    max_gamma = max_gamma-np.min(max_gamma)
+    gamma = np.zeros(len(phi_values))
+
+    for p in range(len(phi_values)):
+        action = (m / 2) * phi_values[p]**2 + (lamb / 24) * phi_values[p]**4 #Classical action
+        prop = m + (lamb * phi_values[p]**2)/2    #propagator (2nd derivative of S(phi))
+        gamma[p] = action + (1/2) * np.log(prop) + (1/2)  #calculate 1PI action
+
+
     fig, (ax2) = plt.subplots(1,1)             #figures for plots
     fig1, (ax4) = plt.subplots(1,1)
     fig2, (ax3) = plt.subplots(1,1)
@@ -70,13 +79,14 @@ if __name__ == '__main__':
         ax3.tick_params(labelsize=26)
 
     s_class = []
-    s_classical = classical_action(phi_values, m, xhi, lamb, s_class)
+    #s_classical = classical_action(phi_values, m, xhi, lamb, s_class)
 
-    ax4.plot(phi_values, s_classical, "k", label="$S(\phi)$")
-    ax4.plot(phi_values, max_gamma, ".", label="$\Gamma(\phi)$")
+    #ax4.plot(phi_values, s_classical, "k", label="$S(\phi)$")
+    ax4.plot(phi_values, gamma, ".b", label="$\Gamma(\phi)$ Analytical")
+    ax4.plot(phi_values, max_gamma, ".k", label="$\Gamma(\phi)$ Numerical")
     ax4.set_xlabel("$\phi$", fontsize="30")
     ax4.set_ylabel("$\Gamma(\phi)$", fontsize="30")
     ax4.tick_params(labelsize=26)
-    ax4.legend(loc="upper right", fontsize=28)
+    ax4.legend(loc="upper right", markerscale=3, fontsize=26)
 
     plt.show()

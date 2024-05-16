@@ -23,15 +23,6 @@ def integration(j_values, k_values, m, xhi, lamb, z):
             z[k,j] = z_intermediate[0]
     return z
 
-def gamma_jk(phi, j_values, k_values, w, delta, array):
-    """
-    Calculates the Legendre-Fenchel transformation of W[J]. Returns array of \Gamma_j[phi] values.
-    """
-    for j in range(len(j_values)):
-            for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (phi**2 + delta)
-    return array
-
 
 def maximise(g):
     '''
@@ -50,6 +41,16 @@ def maximise(g):
         max_gamma = np.nanmax(g)
     return max_gamma
 
+def gamma_jk(phi, j_values, k_values, w, delta, array):
+    """
+    Calculates the Legendre-Fenchel transformation of W[J]. Returns array of \Gamma_j[phi] values.
+    """
+    for j in range(len(j_values)):
+            for k in range(len(k_values)):
+                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (delta+phi**2)
+
+    return array
+
 def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
     """
     Extremises \Gamma_{JK} to find \Gamma{\phi,\Delta}
@@ -60,15 +61,15 @@ def max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma):
             gamma[d,p] = maximise(g)
     return gamma
 
-
 if __name__ == '__main__':
    
-    msq, xhi, lamb = -2, 0, 0.1 #constants
+    msq, xhi, lamb = -2, 0, 4 #constants
 
-    step, min_val, max_val = 0.5, -30, 30
+    step, min_val, max_val = 0.5, -80, 80
     step_pd = 0.05
     j_values = np.arange(min_val, max_val+step, step)     #arrays for source terms and one- and two- point functs             
     k_values = np.arange(min_val, max_val+step, step)
+ 
     phi_values = np.arange(-2,2+step_pd, step_pd)
     delta_values = np.arange(0.25,4.25+step_pd, step_pd)
 
@@ -82,8 +83,10 @@ if __name__ == '__main__':
     w = -np.log(z)
     gamma = max_gamma(phi_values, delta_values, j_values, k_values, w, g_jk, gamma)
     X, Y = np.meshgrid(phi_values,delta_values)
+    gamma = gamma-np.nanmin(gamma)
+
     
-    fig, (ax1) = plt.subplots(1,1)     #plots
+    fig1, (ax1) = plt.subplots(1,1)     #plots
     im1 = ax1.pcolormesh(phi_values, delta_values, gamma)
     ax1.contour(X,Y,gamma, colors=['black'])
     ax1.set_xlabel("$\phi$", fontsize="28")
@@ -91,8 +94,21 @@ if __name__ == '__main__':
     ax1.set_title("$\Gamma[\phi,\Delta]$", fontsize="28")
     plt.colorbar(im1)
     ax1.set_aspect('equal')
+
+    fig = plt.figure()
+    ax2 = fig.add_subplot(111, projection='3d')
+    im2=ax2.plot_surface(X, Y, gamma, rstride=10, cstride=10, cmap="viridis", edgecolors='k', lw=0.6)
+    ax2.set_xlabel("$J$", fontsize="28")
+    ax2.set_ylabel("$K$", fontsize="28")
+    ax2.set_zlabel("W(J,K)", fontsize="28")
+    ax2.tick_params(labelsize=28)
+    ax2.yaxis.labelpad = 25
+    ax2.xaxis.labelpad = 25
+    ax2.zaxis.labelpad = 25
+
     plt.tight_layout
     plt.show()
+
     pd_txt = np.vstack((phi_values, delta_values))
-    np.savetxt("data15.txt", gamma)
-    np.savetxt("pd_values15.txt", pd_txt)
+    np.savetxt("data16.txt", gamma)
+    np.savetxt("pd_values16.txt", pd_txt)

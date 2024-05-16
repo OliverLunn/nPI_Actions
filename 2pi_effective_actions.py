@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
 from matplotlib import colormaps
+from tqdm import tqdm
 from mpl_toolkits.mplot3d import Axes3D
 
 def integrand(phi, m, xhi, lamb, j, k):
@@ -9,7 +10,7 @@ def integrand(phi, m, xhi, lamb, j, k):
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
-    for j in range(len(j_values)):
+    for j in tqdm(range(len(j_values))):
         for k in range(len(k_values)):
             z_intermediate = integrate.quad(integrand, -np.inf, np.inf, args=(m, xhi, lamb, j_values[j], k_values[k]))
             z[k,j] = z_intermediate[0]
@@ -19,7 +20,7 @@ def gamma_j(phi, j_values, k_values, w, delta, array):
     """
     Calculates the Legendre-Fenchel transformation of W[J]. Returns array of \Gamma_j[phi] values.
     """
-    for j in range(len(j_values)):
+    for j in tqdm(range(len(j_values))):
             for k in range(len(k_values)):
                 array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (phi**2 + delta)
     return array
@@ -43,7 +44,7 @@ if __name__ == '__main__':
    
     m, xhi, lamb = -2, 0, 4
     phi, delta = -2, 1
-    step, min_val, max_val = 0.05, -5, 5
+    step, min_val, max_val = 0.05, -6, 6
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     
@@ -52,15 +53,17 @@ if __name__ == '__main__':
     
     z = integration(j_values, k_values, m, xhi, lamb, z)
     w = -np.log(z)
-    #g = gamma_j(phi, j_values, k_values, w, delta, g_j)       #calling g_j  funct to generate g_j data
-    #g = g-np.nanmin(g)
-    #max_gamma, max_coord = maximise(g)
+    g = gamma_j(phi, j_values, k_values, w, delta, g_j)       #calling g_j  funct to generate g_j data
+    g = g-np.nanmin(g)
+    max_gamma, max_coord = maximise(g)
     #print(max_gamma)
     fig1, (ax1) = plt.subplots(1,1)
     fig = plt.figure()
     ax2 = fig.add_subplot(111, projection='3d')
-    
+    X,Y = np.meshgrid(j_values, k_values)
+
     im1 = ax1.pcolormesh(j_values, k_values, w, cmap='viridis', vmin=-35, vmax=5)
+    ax1.contour(X,Y,w, colors=['black'])
     ax1.set_xlabel("J", fontsize="30")
     ax1.set_ylabel("K", fontsize="30")
     ax1.set_xticks([-6,-3,0,3,6])
@@ -71,5 +74,12 @@ if __name__ == '__main__':
     cbar.ax.tick_params(labelsize=28)
     ax1.set_aspect('equal')
 
-    plt.tight_layout()
+    im2=ax2.plot_surface(X, Y, g, rstride=10, cstride=10, cmap="viridis", edgecolors='k', lw=0.6)
+    ax2.set_xlabel("$J$", fontsize="28")
+    ax2.set_ylabel("$K$", fontsize="28")
+    ax2.set_zlabel("W(J,K)", fontsize="28")
+    ax2.tick_params(labelsize=28)
+    ax2.yaxis.labelpad = 25
+    ax2.xaxis.labelpad = 25
+    ax2.zaxis.labelpad = 25
     plt.show()
