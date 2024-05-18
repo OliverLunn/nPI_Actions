@@ -13,7 +13,7 @@ We work in terms of rescaled coordinates:
 
 '''
 def integrand(phi, m, xhi, lamb, j, k):
-    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (1/2 * k * (phi**2)))
+    integrand = np.exp(-((m / 2) * (phi ** 2)) - ((1/6) * xhi * (phi**3)) - ((lamb/24) * (phi ** 4)) + (j * phi) +  (k * (phi**2)))
     return integrand
 
 def integration(j_values, k_values, m, xhi, lamb, z):
@@ -47,7 +47,7 @@ def gamma_jk(phi, j_values, k_values, w, delta, array):
     """
     for j in range(len(j_values)):
             for k in range(len(k_values)):
-                array[k,j] = w[k,j] + j_values[j] * phi + 1/2 * k_values[k] * (delta+phi**2)
+                array[k,j] = w[k,j] + j_values[j] * phi + k_values[k] * (delta)
 
     return array
 
@@ -65,8 +65,8 @@ if __name__ == '__main__':
    
     msq, xhi, lamb = -2, 0, 4 #constants
 
-    step, min_val, max_val = 0.5, -80, 80
-    step_pd = 0.05
+    step, min_val, max_val = 0.1, -75,75
+    step_pd = 0.025
     j_values = np.arange(min_val, max_val+step, step)     #arrays for source terms and one- and two- point functs             
     k_values = np.arange(min_val, max_val+step, step)
  
@@ -95,20 +95,9 @@ if __name__ == '__main__':
     plt.colorbar(im1)
     ax1.set_aspect('equal')
 
-    fig = plt.figure()
-    ax2 = fig.add_subplot(111, projection='3d')
-    im2=ax2.plot_surface(X, Y, gamma, rstride=10, cstride=10, cmap="viridis", edgecolors='k', lw=0.6)
-    ax2.set_xlabel("$J$", fontsize="28")
-    ax2.set_ylabel("$K$", fontsize="28")
-    ax2.set_zlabel("W(J,K)", fontsize="28")
-    ax2.tick_params(labelsize=28)
-    ax2.yaxis.labelpad = 25
-    ax2.xaxis.labelpad = 25
-    ax2.zaxis.labelpad = 25
-
     plt.tight_layout
     plt.show()
 
     pd_txt = np.vstack((phi_values, delta_values))
-    np.savetxt("data16.txt", gamma)
-    np.savetxt("pd_values16.txt", pd_txt)
+    np.savetxt("data17.txt", gamma)
+    np.savetxt("pd_values17.txt", pd_txt)

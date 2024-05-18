@@ -43,8 +43,8 @@ def maximise(g):
 if __name__ == '__main__':
    
     m, xhi, lamb = -2, 0, 4
-    phi, delta = -2, 1
-    step, min_val, max_val = 0.05, -6, 6
+    phi, delta = 0, 0
+    step, min_val, max_val = 0.1, -10, 10
     j_values = np.arange(min_val, max_val+step, step)                  
     k_values = np.arange(min_val, max_val+step, step)
     
@@ -58,22 +58,23 @@ if __name__ == '__main__':
     max_gamma, max_coord = maximise(g)
     #print(max_gamma)
     fig1, (ax1) = plt.subplots(1,1)
-    fig = plt.figure()
-    ax2 = fig.add_subplot(111, projection='3d')
+    #fig = plt.figure()
+
     X,Y = np.meshgrid(j_values, k_values)
 
-    im1 = ax1.pcolormesh(j_values, k_values, w, cmap='viridis', vmin=-35, vmax=5)
-    ax1.contour(X,Y,w, colors=['black'])
+    im1 = ax1.pcolormesh(j_values, k_values, g, cmap='viridis')
+    ax1.contour(X,Y,g, colors=['black'], linestyles="solid")
     ax1.set_xlabel("J", fontsize="30")
     ax1.set_ylabel("K", fontsize="30")
-    ax1.set_xticks([-6,-3,0,3,6])
-    ax1.set_yticks([-6,-3,0,3,6])
-    #ax1.plot(j_values[max_coord[1]], k_values[max_coord[0]], ".k",markersize="12.5")
+    ax1.set_xticks([-10,-5,0,5,10])
+    ax1.set_yticks([-10,-5,0,5,10])
+    ax1.plot(j_values[max_coord[1]], k_values[max_coord[0]], ".k", markersize="12.5")
     ax1.tick_params(labelsize=28)
     cbar = plt.colorbar(im1)
     cbar.ax.tick_params(labelsize=28)
     ax1.set_aspect('equal')
-
+    '''
+    ax2 = fig.add_subplot(111, projection='3d')
     im2=ax2.plot_surface(X, Y, g, rstride=10, cstride=10, cmap="viridis", edgecolors='k', lw=0.6)
     ax2.set_xlabel("$J$", fontsize="28")
     ax2.set_ylabel("$K$", fontsize="28")
@@ -82,4 +83,6 @@ if __name__ == '__main__':
     ax2.yaxis.labelpad = 25
     ax2.xaxis.labelpad = 25
     ax2.zaxis.labelpad = 25
+    '''
+    plt.tight_layout()
     plt.show()
